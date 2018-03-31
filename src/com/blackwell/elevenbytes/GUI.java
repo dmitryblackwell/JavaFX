@@ -107,8 +107,8 @@ public class GUI extends Application {
                         });
                     }
                 },
-                80,
-                80,
+                10,
+                10,
                 TimeUnit.MILLISECONDS);
     }
 }

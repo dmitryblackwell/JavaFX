@@ -5,156 +5,169 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class Map {
-    public static final int FIELD_SIZE = 4; // field size, in this case 4x4
+    /** field size, in this case 4x4 */
+    public static final int FIELD_SIZE = 4;
 
-    private static final int START_VALUE = 2; // value of generated cell
+    /** start value of generated cell */
+    private static final int START_VALUE = 2;
+
+    /** map that present a two dimensional array of ints
+     *  if cell equals zero it is empty
+     */
     private int[][] map = new int[FIELD_SIZE][FIELD_SIZE];
+
+    private enum Side { LEFT, RIGHT, UP, DOWN}
     private int score=0;
-    public Map(){
+
+    /*_____________________________INTERFACE_START_____________________________*/
+    Map(){
         for (int[] row : map)
             Arrays.fill(row,0);
 
         addCell();
     }
     public int getCellValue(int x,int y){
-        int value = map[y][x]; // Make a copy
-        return value;
+        return map[y][x];
     }
 
     public int getScore() {
         return score;
     }
 
-    // This code is fucking shitty
-    // TODO refactor this code
-    // TODO create interface
-    // TODO change logic(order) of merge
-    public void moveLeft(){
-        shiftLeft();
-        mergeLeft();
-        mergeLeft();
-        addCell();
-    }
-
-    public void moveRight(){
-        shiftRight();
-        mergeRight();
-        mergeRight();
-        addCell();
-    }
-
-    public void moveUp(){
-        shifUp();
-        mergeUp();
-        mergeUp();
-        addCell();
-    }
-    public void moveDown(){
-        shiftDown();
-        mergeDown();
-        mergeDown();
-        addCell();
-    }
-    private void mergeRight(){
-        for(int i=0; i<FIELD_SIZE; ++i)
-            for(int j=0; j<FIELD_SIZE-1; ++j)
-                if (checkForMovement(j,i,+1,0))
-                    break;
-
-    }
-    private void mergeLeft(){
-        for(int i=0; i<FIELD_SIZE; ++i)
-            for(int j=FIELD_SIZE-1; j>0; --j)
-                if (checkForMovement(j,i,-1,0))
-                    break;
-
-    }
-    private void mergeUp(){
-        for(int i=0; i<FIELD_SIZE; ++i)
-            for(int j=1; j<FIELD_SIZE; ++j)
-                if (checkForMovement(i,j,0,-1))
-                    break;
-    }
-    private void mergeDown(){
-        for(int i=0; i<FIELD_SIZE; ++i)
-            for(int j=0; j<FIELD_SIZE-1; ++j)
-                if (checkForMovement(i,j,0,1))
-                    break;
-    }
-    private void shiftDown(){
-        for(int i=0; i<FIELD_SIZE; ++i){
-            int[] tmp = new int[FIELD_SIZE];
-            Arrays.fill(tmp,0);
-            int carriage=FIELD_SIZE-1;
-            for(int j=FIELD_SIZE-1;j>=0;--j) {
-                if (map[j][i] != 0){
-                    tmp[carriage] = map[j][i];
-                    carriage--;
-                }
-            }
-            for(int j=0;j<FIELD_SIZE; ++j)
-                map[j][i]=tmp[j];
-        }
-    }
-
-    private void shifUp(){
-        for(int i=0; i<FIELD_SIZE; ++i){
-            int[] tmp = new int[FIELD_SIZE];
-            Arrays.fill(tmp,0);
-            int carriage=0;
-            for(int j=0;j<FIELD_SIZE;++j) {
-                if (map[j][i] != 0){
-                    tmp[carriage] = map[j][i];
-                    carriage++;
-                }
-            }
-            for(int j=0;j<FIELD_SIZE; ++j)
-                map[j][i]=tmp[j];
-        }
-    }
-
-    private void shiftLeft(){
-        for(int i=0; i<FIELD_SIZE; ++i){
-            int[] tmp = new int[FIELD_SIZE];
-            Arrays.fill(tmp,0);
-            int carriage=0;
-            for(int j=0;j<FIELD_SIZE;++j) {
-                if (map[i][j] != 0){
-                    tmp[carriage] = map[i][j];
-                    carriage++;
-                }
-            }
-            System.arraycopy(tmp,0,map[i],0,FIELD_SIZE);
-        }
-    }
-    private void shiftRight(){
-        for(int i=0; i<FIELD_SIZE; ++i){
-            int[] tmp = new int[FIELD_SIZE];
-            Arrays.fill(tmp,0);
-            int carriage=FIELD_SIZE-1;
-            for(int j=FIELD_SIZE-1;j>=0;--j) {
-                if (map[i][j] != 0){
-                    tmp[carriage] = map[i][j];
-                    carriage--;
-                }
-            }
-            System.arraycopy(tmp,0,map[i],0,FIELD_SIZE);
-        }
-    }
-
+    public void moveLeft(){ move(Side.LEFT);}
+    public void moveRight(){ move(Side.RIGHT); }
+    public void moveUp(){ move(Side.UP); }
+    public void moveDown(){ move(Side.DOWN); }
+    /*_____________________________INTERFACE_END_______________________________*/
 
     /**
-     *  This method check if it is possible to move cell on x,y to the vector of vX,vY
-     *  If it is possible, than it moves it and return true
+     * Make a move to special side
+     * First it is shifting all elements together,
+     *
+     * Example of moving to Side s == LEFT
+     * so if our row looks this: 0 2 0 2
+     * it is becoming this: 0 2 2 0
+     * after it is merging two elements: 0 4 0 0
+     * next it is shifting them again: 4 0 0 0
+     *
+     * @param s side where we moving to
+     */
+    private void move(Side s){
+        shift(s);
+        merge(s);
+        shift(s);
+        addCell();
+    }
+
+    /**
+     * This method merge first pair of same cells.
+     * It is comes from Side s to opposite side and
+     * checking for pair of same values.
+     * After pair is found it is making a merge and break from the loop
+     *
+     * @param s Side to witch we have to merge all cells.
+     */
+    private void merge(Side s){
+        for (int i = 0; i < FIELD_SIZE; ++i) {
+            switch (s) {
+                case LEFT:
+                    for (int j = 0; j < FIELD_SIZE - 1; ++j)
+                        if (makeMerge(j, i, +1, 0)) break;
+                    break;
+                case RIGHT:
+                    for (int j = FIELD_SIZE - 1; j > 0; --j)
+                        if (makeMerge(j, i, -1, 0)) break;
+                    break;
+                case UP:
+                    for (int j = 0; j < FIELD_SIZE - 1; ++j)
+                        if (makeMerge(i, j, 0, +1)) break;
+                    break;
+                case DOWN:
+                    for (int j = FIELD_SIZE - 1; j > 0; --j)
+                        if (makeMerge(i, j, 0, -1)) break;
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Swap two nearby valuables on the map, but only if first one zero.
+     * For example we got first row setting up like this 1 0 0 3
+     * First of all it is changing two zeros and row looks still the same
+     * Second one it is chane 0 and 3, so row looks like this 1 0 3 0
+     *
+     * @param i y of the point on the map
+     * @param j x of the point
+     * @param vX direction by x, can be -1:Left, 0:Still, +1:Right
+     * @param vY dirextion by y, can be -1:Up, 0:Still, +1:Down
+     */
+    private void swapTwoPoints(int i, int j, int vX, int vY){
+        int tmp = map[i][j];
+        map[i][j] = map[i+vY][j+vX];
+        map[i+vY][j+vX] = tmp;
+    }
+
+    /**
+     * This method moving all elements to one side
+     * It is running FIELD_SIZE times (in this case 4) so all elements
+     * even from other side moves to one.
+     * It depend where to move, but technically it comes from Side s to opposite
+     * and change to values if first one is zerro
+     *
+     * For example:
+     * If we need move all elements to the left side and we have this row: 0 2 0 8
+     * First we change 0 and 2, so row became 2 0 0 8
+     * After it is changing two zeros, so row looks same for us
+     * Next it is changing 0 and 8: 2 0 8 0
+     * After it first iteration is done and we come to next one
+     * On second phase it is changing 0 and 8: 2 8 0 8
+     * Yeeah, baby! We done here.
+     * Actually not.
+     * We run this FIELD_SIZE time in case our row looks like this: 0 0 0 4
+     *
+     * @param s where to shift all elements
+     */
+    private void shift(Side s){
+        for(int times=0; times<FIELD_SIZE; ++times) {
+            for (int i = 0; i < FIELD_SIZE; ++i) {
+                switch (s) {
+                    case LEFT:
+                        for (int j = 0; j < FIELD_SIZE - 1; ++j)
+                            if (map[i][j] == 0)
+                                swapTwoPoints(i, j, +1, 0);
+                        break;
+                    case RIGHT:
+                        for (int j = FIELD_SIZE - 1; j > 0; --j)
+                            if (map[i][j] == 0)
+                                swapTwoPoints(i, j, -1, 0);
+                        break;
+                    case UP:
+                        for (int j = 0; j < FIELD_SIZE - 1; ++j)
+                            if (map[j][i] == 0)
+                                swapTwoPoints(j, i, 0, +1);
+                        break;
+                    case DOWN:
+                        for (int j = FIELD_SIZE - 1; j > 0; --j)
+                            if (map[j][i] == 0)
+                                swapTwoPoints(j, i, 0, -1);
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     *  This method check if it is possible to merge cell on x,y to the vector of vX,vY
+     *  If it is possible, than it merges it and return true
      *  and if it is not, that it do nothing and return false
      *
-     * @param x x of point where you need to check if movement is possible
+     * @param x x of point where you need to check if merge is possible
      * @param y same for y
      * @param vX velocityX. Vector on the x line where to go. Can be 1,-1 or 0
      * @param vY velocityY. Same for vX
      * @return true if movement is done
      */
-    private boolean checkForMovement(int x,int y,int vX, int vY){
+    private boolean makeMerge(int x, int y, int vX, int vY){
         // if cell is not zero AND if next cell is same
         if(map[y][x] != 0 && map[y+vY][x+vX] == map[y][x]){
             map[y+vY][x+vX] *= 2;
@@ -172,7 +185,6 @@ public class Map {
     private void addCell(){
         Point p = getRandomPoint();
         map[p.y][p.x] = START_VALUE;
-        score += START_VALUE;
     }
 
     /**
