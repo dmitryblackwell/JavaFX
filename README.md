@@ -1,2 +1,8 @@
 # JavaFX
-Some beautiful examples of JavaFX opportunity.
+
+Simple examples of JavaFx possibilities 
+
+### Calculator
+
+![alt text](https://raw.githubusercontent.com/dmitryblackwell/JavaFX/master/screenshots/calculator.gif)
+
