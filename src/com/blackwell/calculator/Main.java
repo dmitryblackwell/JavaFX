@@ -17,36 +17,6 @@ public class Main extends Application {
     private Label label;
 
 
-    // Do NOT fucking add any brackets here!!!
-    // Otherwise everything goes to hell
-    private static final String MATERIAL_BUTTON = ".button-raised{" +
-            "    -fx-padding: 0em 0em;" +
-            "    -fx-font-size: 14px;" +
-            "    -jfx-button-type: RAISED;" +
-            "    -fx-background-color: rgb(0,166,178);" +
-            "    -fx-pref-width: 55;" +
-            "    -fx-pref-height: 40;" +
-            "    -fx-text-fill: WHITE;" +
-            "    -fx-alignment: center;"  +
-            "    -fx-border-insets: 10px;}";
-    private static final String MATERIAL_CTRL = ".button-raised{-fx-padding: 0em 0em;" +
-            "-fx-font-size: 14px;-jfx-button-type: RAISED;" +
-            " -fx-background-color: rgb(0,144,178);" +
-            " -fx-pref-width: 55;" +
-            "-fx-pref-height: 40;" +
-            "-fx-text-fill: WHITE;" +
-            "-fx-alignment: center;" +
-            "-fx-border-insets: 10px;}";
-    private static final String MATERIAL_ZERRO = ".button-raised{" +
-            "    -fx-padding: 0em 0em;" +
-            "    -fx-font-size: 14px;" +
-            "    -jfx-button-type: RAISED;" +
-            "    -fx-background-color: rgb(0,166,178);" +
-            "    -fx-pref-width: 110;" +
-            "    -fx-pref-height: 40;" +
-            "    -fx-text-fill: WHITE;" +
-            "    -fx-alignment: center;"  +
-            "    -fx-border-insets: 10px;}";
     @Override
     public void start(Stage primaryStage) throws Exception{
         primaryStage.initStyle(StageStyle.UTILITY);
@@ -78,9 +48,9 @@ public class Main extends Application {
             final int carriage = i;
             btnCtrl[i] = (Button) scene.lookup(btnCtrlNames[i][0]);
             if (i>=4)
-                btnCtrl[i].setStyle(MATERIAL_CTRL);
+                btnCtrl[i].setStyle(Material.CTRL);
             else
-                btnCtrl[i].setStyle(MATERIAL_BUTTON);
+                btnCtrl[i].setStyle(Material.BUTTON);
             btnCtrl[i].setOnAction(event -> add(btnCtrlNames[carriage][1]));
         }
 
@@ -88,10 +58,10 @@ public class Main extends Application {
         for(int i=0;i<btnNumbers.length;++i) {
             final String CARRIAGE = String.valueOf(i);
             btnNumbers[i] = (Button) scene.lookup("#"+i);
-            btnNumbers[i].setStyle(MATERIAL_BUTTON);
+            btnNumbers[i].setStyle(Material.BUTTON);
             btnNumbers[i].setOnAction(event -> add(CARRIAGE));
         }
-        btnNumbers[0].setStyle(MATERIAL_ZERRO);
+        btnNumbers[0].setStyle(Material.ZERRO);
         primaryStage.setResizable(false);
         primaryStage.show();
     }
@@ -153,9 +123,11 @@ public class Main extends Application {
                         result -= element;
                         break;
                     case "/":
-                        result = element / result;
+                        result = Float.parseFloat(labelLine[i-2]) / element;
+                        break;
                     case "x":
                         result *= element;
+                        break;
                 }
             }
             if (result%1 == 0)
