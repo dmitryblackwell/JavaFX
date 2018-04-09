@@ -21,4 +21,10 @@ public interface Map {
     void moveRight();
     void moveUp();
     void moveDown();
+    void moveRandom();
+    String SAVES_FILE = "saves.txt";
+
+    void saveGame(String bestScore);
+    String loadGame();
+
 }

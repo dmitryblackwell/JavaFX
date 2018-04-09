@@ -66,6 +66,10 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Add new number or operator to the label
+     * @param s text on button, that was clicked
+     */
     private void add(String s){
         String out = "";
         if(label.getText().equals("0") || label.getText().equals("Wrong Input"))
@@ -109,6 +113,11 @@ public class Main extends Application {
         label.setText(out);
     }
 
+    /**
+     *  Calculate result.
+     *  Calling, when equals button was pressed.
+     * @return result of mathematical example
+     */
     private String getResult(){
         try {
             String[] labelLine = label.getText().split(" ");

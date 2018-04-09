@@ -1,6 +1,7 @@
 package com.blackwell.elevenbytes;
 
 import java.awt.*;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -44,6 +45,55 @@ public class MapImpl implements Map {
     public void moveUp(){ move(Side.UP); }
     @Override
     public void moveDown(){ move(Side.DOWN); }
+
+    @Override
+    public void moveRandom() {
+        Random R = new Random();
+        int x = R.nextInt(4);
+        move(Side.values()[x]);
+    }
+
+    @Override
+    public void saveGame(String bestScore){
+        try {
+            FileWriter file = new FileWriter(SAVES_FILE);
+            PrintWriter writer = new PrintWriter(file);
+            // elements that need to save: best score, current score, 16 cells.
+            StringBuilder out = new StringBuilder();
+            out.append(bestScore).append(" ").append(score);
+            for(int i = 0; i< Map.FIELD_SIZE; ++i)
+                for (int j = 0; j < Map.FIELD_SIZE; ++j)
+                    out.append(" ").append(map[j][i]);
+            //byte[] bytesOut = out.toString().getBytes();
+            writer.print(out.toString());
+            writer.close();
+            file.close();
+        } catch (FileNotFoundException e) {
+            System.err.println("File "+ SAVES_FILE + " not found.");
+        } catch (IOException e) {
+            System.err.println("Unable write file ");
+        }
+    }
+
+    @Override
+    public String loadGame(){
+        try {
+            FileReader file = new FileReader(SAVES_FILE);
+            BufferedReader reader = new BufferedReader(file);
+            String line = reader.readLine();
+            String[] data = line.split(" ");
+            score = Integer.parseInt(data[1]);
+            for(int i=0;i<FIELD_SIZE;++i)
+                for (int j=0; j<FIELD_SIZE; ++j)
+                    map[j][i] = Integer.parseInt(data[i*FIELD_SIZE + j + 2]);
+            return data[0];
+        } catch (FileNotFoundException e) {
+            System.err.println("File "+ SAVES_FILE + " not found.");
+        } catch (IOException e) {
+            System.err.println("Unable write file.");
+        }
+        return "0";
+    }
     /*_____________________________INTERFACE_END_______________________________*/
 
     /**

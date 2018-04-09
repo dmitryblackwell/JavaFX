@@ -22,7 +22,7 @@ public class GUI extends Application {
 
     private Button[][] cells = new Button[MapImpl.FIELD_SIZE][MapImpl.FIELD_SIZE];
     private Text scoreText = new Text();
-
+    private Text bestScoreText = new Text("0");
     private Map map = new MapImpl();
 
     /** Delay before initial update if the map */
@@ -31,6 +31,8 @@ public class GUI extends Application {
     private static final int PERIOD = 10;
     /** Stable size of each cell. */
     private static final int CELL_SIZE = 60;
+    private static final int WIDTH = 280;
+    private static final int HEIGHT = 400;
 
     public static void main(String[] args) {
         launch(args);
@@ -51,23 +53,40 @@ public class GUI extends Application {
         vBox.setSpacing(10d);
         vBox.setAlignment(Pos.BOTTOM_CENTER);
 
+        // Top pane with NewGame-button.
+
+        bestScoreText.setText(map.loadGame());
+        bestScoreText.setFont(new Font(30));
+
+        Button newGameBtn = new Button("New game");
+        newGameBtn.setTextFill(Paint.valueOf(Bg.SLIGHTLY.toString()));
+        newGameBtn.setStyle("-fx-background-color: "+Bg.RED_FULL+";");
+        newGameBtn.setOnAction(event -> map = new MapImpl());
+
+        Region region = new Region();
+        HBox.setHgrow(region, Priority.ALWAYS);
+
+        HBox top = new HBox(newGameBtn, region, bestScoreText);
+
+        vBox.getChildren().addAll(top);
+
         // creating Text for displaying score
         HBox hTextBox = new HBox();
-        hTextBox.setPrefHeight(120);
+        hTextBox.setPrefHeight(WIDTH);
 
         scoreText.setText(String.valueOf(map.getScore()));
         scoreText.setFont(new Font(50));
         scoreText.setTextAlignment(TextAlignment.CENTER);
 
-        hTextBox.getChildren().add(scoreText);
+        hTextBox.getChildren().addAll(scoreText);
         hTextBox.setAlignment(Pos.CENTER);
         vBox.getChildren().add(hTextBox);
         
-        for(int i = 0; i< MapImpl.FIELD_SIZE; ++i){
+        for(int i = 0; i< Map.FIELD_SIZE; ++i){
             HBox hBox = new HBox();
             hBox.setSpacing(10d);
             hBox.setAlignment(Pos.CENTER);
-            for (int j = 0; j< MapImpl.FIELD_SIZE; ++j){
+            for (int j = 0; j< Map.FIELD_SIZE; ++j){
                 cells[i][j] = new Button();
                 cells[i][j].setText("0");
                 // For stable size (making nor resizeable buttons)
@@ -80,14 +99,18 @@ public class GUI extends Application {
             vBox.getChildren().add(hBox);
         }
 
+
+
+
         StackPane root = new StackPane();
-        StackPane.setAlignment(scoreText, Pos.CENTER);
+//        root.getChildren().add(newGameBtn);
+//        StackPane.setAlignment(newGameBtn, Pos.TOP_LEFT);
 
         root.setStyle("-fx-background-color: "+Bg.SLIGHTLY+";");
         root.getChildren().add(vBox);
 
         primaryStage.setTitle("2048");
-        Scene scene = new Scene(root, 280, 400);
+        Scene scene = new Scene(root, WIDTH, HEIGHT);
 
         // keyReleasedHandler
         scene.setOnKeyReleased(event -> {
@@ -109,6 +132,7 @@ public class GUI extends Application {
                     map.moveDown();
                     break;
             }
+            map.saveGame(bestScoreText.getText());
         });
 
         primaryStage.setScene(scene);
@@ -147,7 +171,13 @@ public class GUI extends Application {
                                 setButtonStyle(i,j,30, Bg.STANDART);
                         }
                     }
+
+                    if (map.getScore() > (Integer.parseInt(bestScoreText.getText())))
+                        bestScoreText.setText(String.valueOf(map.getScore()));
                     scoreText.setText(String.valueOf(map.getScore()));
+
+                    // If you wanna have some fun here
+                    //map.moveRandom();
                 }),
                 INITIAL_DELAY,
                 PERIOD,
@@ -163,9 +193,9 @@ public class GUI extends Application {
      */
     private void setButtonStyle(int i,int j, int FontSize, Bg color){
         if (FontSize < 512)
-            cells[i][j].setTextFill(Paint.valueOf("FFFFFF"));
+            cells[i][j].setTextFill(Paint.valueOf(Bg.SLIGHTLY.toString()));
         else
-            cells[i][j].setTextFill(Paint.valueOf("000000"));
+            cells[i][j].setTextFill(Paint.valueOf(Bg.BLACK.toString()));
 
         cells[i][j].setFont(new Font(FontSize));
         Color BgColor = Color.web(color.toString());
