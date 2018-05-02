@@ -28,7 +28,7 @@ public class GUI extends Application {
     /** Delay before initial update if the map */
     private static final int INITIAL_DELAY = 1;
     /** Map is updating in window every PERIOD (in this case 10) */
-    private static final int PERIOD = 10;
+    private static final int PERIOD = 100;
     /** Stable size of each cell. */
     private static final int CELL_SIZE = 60;
     private static final int WIDTH = 280;
@@ -177,7 +177,7 @@ public class GUI extends Application {
                     scoreText.setText(String.valueOf(map.getScore()));
 
                     // If you wanna have some fun here
-                    //map.moveRandom();
+                    map.moveRandom();
                 }),
                 INITIAL_DELAY,
                 PERIOD,

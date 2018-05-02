@@ -48,9 +48,31 @@ public class MapImpl implements Map {
 
     @Override
     public void moveRandom() {
-        Random R = new Random();
-        int x = R.nextInt(4);
-        move(Side.values()[x]);
+//        Random R = new Random();
+//        int x = R.nextInt(4);
+//        move(Side.values()[x]);
+
+        // !!! Be careful - very bad code here
+        String mapBefore = Arrays.deepToString(map);
+        moveLeft();
+        String mapAfter = Arrays.deepToString(map);
+
+        if(mapBefore.equals(mapAfter)){
+            moveDown();
+            mapAfter = Arrays.deepToString(map);
+
+            if(mapAfter.equals(mapBefore)){
+                moveRight();
+                moveLeft();
+
+                mapAfter = Arrays.deepToString(map);
+
+                if(mapAfter.equals(mapBefore))
+                    moveUp();
+            }
+        }
+
+
     }
 
     @Override
