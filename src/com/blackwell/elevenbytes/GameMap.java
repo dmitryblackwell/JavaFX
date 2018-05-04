@@ -5,10 +5,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Random;
 
-public class MapImpl implements Map {
-
-    /** start value of generated cell */
-    private static final int START_VALUE = 2;
+public class GameMap implements Map {
 
     /** map that present a two dimensional array of ints
      *  if cell equals zero it is empty
@@ -19,11 +16,24 @@ public class MapImpl implements Map {
     private int score=0;
 
     /*_____________________________INTERFACE_START_____________________________*/
-    MapImpl(){
+    GameMap(){
         for (int[] row : map)
             Arrays.fill(row,0);
 
         addCell();
+    }
+    public GameMap(Map map){
+        this();
+        for(int i=0; i<FIELD_SIZE; ++i)
+            for(int j=0; j<FIELD_SIZE; ++j)
+                this.map[i][j] = map.getCellValue(j,i);
+        score = map.getScore();
+    }
+    public GameMap(String map, int score){
+        this();
+        for(int i=0; i<FIELD_SIZE; ++i)
+            for(int j=0; j<FIELD_SIZE; ++j)
+                this.map[i][j] = (int) map.charAt(i*FIELD_SIZE + j);
     }
 
     @Override
@@ -46,34 +56,6 @@ public class MapImpl implements Map {
     @Override
     public void moveDown(){ move(Side.DOWN); }
 
-    @Override
-    public void moveRandom() {
-//        Random R = new Random();
-//        int x = R.nextInt(4);
-//        move(Side.values()[x]);
-
-        // !!! Be careful - very bad code here
-        String mapBefore = Arrays.deepToString(map);
-        moveLeft();
-        String mapAfter = Arrays.deepToString(map);
-
-        if(mapBefore.equals(mapAfter)){
-            moveDown();
-            mapAfter = Arrays.deepToString(map);
-
-            if(mapAfter.equals(mapBefore)){
-                moveRight();
-                moveLeft();
-
-                mapAfter = Arrays.deepToString(map);
-
-                if(mapAfter.equals(mapBefore))
-                    moveUp();
-            }
-        }
-
-
-    }
 
     @Override
     public void saveGame(String bestScore){
@@ -116,6 +98,16 @@ public class MapImpl implements Map {
         }
         return "0";
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<FIELD_SIZE; ++i)
+            for(int j=0;j<FIELD_SIZE; ++j)
+                sb.append(map[i][j]);
+        return sb.toString();
+    }
+
     /*_____________________________INTERFACE_END_______________________________*/
 
     /**

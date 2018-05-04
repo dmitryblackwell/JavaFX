@@ -4,6 +4,9 @@ public interface Map {
     /** field size, in this case 4x4 */
     int FIELD_SIZE = 4;
 
+    /** start value of generated cell */
+    int START_VALUE = 2;
+
     /**
      * @param x position in row of the cell
      * @param y row of the cell
@@ -21,7 +24,6 @@ public interface Map {
     void moveRight();
     void moveUp();
     void moveDown();
-    void moveRandom();
     String SAVES_FILE = "saves.txt";
 
     void saveGame(String bestScore);

@@ -1,5 +1,6 @@
 package com.blackwell.elevenbytes;
 
+import com.blackwell.elevenbytes.aiset.AI;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -20,15 +21,16 @@ import java.util.concurrent.TimeUnit;
 
 public class GUI extends Application {
 
-    private Button[][] cells = new Button[MapImpl.FIELD_SIZE][MapImpl.FIELD_SIZE];
+    private Button[][] cells = new Button[GameMap.FIELD_SIZE][GameMap.FIELD_SIZE];
     private Text scoreText = new Text();
     private Text bestScoreText = new Text("0");
-    private Map map = new MapImpl();
+    private Map map = new GameMap();
+    private boolean isAiEnable = true;
 
     /** Delay before initial update if the map */
     private static final int INITIAL_DELAY = 1;
     /** Map is updating in window every PERIOD (in this case 10) */
-    private static final int PERIOD = 100;
+    private static final int PERIOD = 50;
     /** Stable size of each cell. */
     private static final int CELL_SIZE = 60;
     private static final int WIDTH = 280;
@@ -61,7 +63,7 @@ public class GUI extends Application {
         Button newGameBtn = new Button("New game");
         newGameBtn.setTextFill(Paint.valueOf(Bg.SLIGHTLY.toString()));
         newGameBtn.setStyle("-fx-background-color: "+Bg.RED_FULL+";");
-        newGameBtn.setOnAction(event -> map = new MapImpl());
+        newGameBtn.setOnAction(event -> map = new GameMap());
 
         Region region = new Region();
         HBox.setHgrow(region, Priority.ALWAYS);
@@ -177,7 +179,9 @@ public class GUI extends Application {
                     scoreText.setText(String.valueOf(map.getScore()));
 
                     // If you wanna have some fun here
-                    map.moveRandom();
+                    if (isAiEnable)
+                        AI.move(map);
+
                 }),
                 INITIAL_DELAY,
                 PERIOD,
