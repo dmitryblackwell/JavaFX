@@ -22,6 +22,7 @@ public class GameMap implements Map {
 
         addCell();
     }
+
     public GameMap(Map map){
         this();
         for(int i=0; i<FIELD_SIZE; ++i)
@@ -34,6 +35,7 @@ public class GameMap implements Map {
         for(int i=0; i<FIELD_SIZE; ++i)
             for(int j=0; j<FIELD_SIZE; ++j)
                 this.map[i][j] = (int) map.charAt(i*FIELD_SIZE + j);
+        this.score = score;
     }
 
     @Override
