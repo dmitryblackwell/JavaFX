@@ -110,6 +110,19 @@ public class GameMap implements Map {
         return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if ( !(obj instanceof GameMap) )
+            return false;
+
+        for(int i=0; i<FIELD_SIZE; ++i)
+            for(int j=0;j<FIELD_SIZE; ++j)
+                if ( ((GameMap) obj).getCellValue(j,i) != map[i][j] )
+                    return false;
+        return true;
+
+    }
+
     /*_____________________________INTERFACE_END_______________________________*/
 
     /**
