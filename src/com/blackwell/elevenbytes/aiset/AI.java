@@ -9,13 +9,19 @@ import java.util.*;
 
 
 public class AI {
+    static int logCount = 0;
+    public static void log() { System.out.println(String.valueOf(logCount++)); }
     public static void move(Map map){
-        Node root = new Node(null, map, null);
+        log();
+        Node root = new Node( map,"");
         root.setUpNodes();
+        log();
 
+        log();
         Iterator it = root.iterator();
         while (it.hasNext())
             ((Node) it.next()).setUpNodes();
+        log();
 
         fillMovementsSet(root);
         Movement movement = new Movement();
@@ -27,20 +33,21 @@ public class AI {
     }
 
     static class Movement{
-        List<Side> movements = new ArrayList<>();
+        String movements = "";
         float score = 0;
         float count = 0;
-        public void addSide(Side s) { movements.add(s); }
+        public void addSide(String s) { movements += s; }
         public void addScore(float score) { this.score += score; count++; }
         public float getAverage() { return score/count; }
 
-        public Movement(List<Side> movements, float score) {
+        public Movement(String movements, float score) {
             this.movements = movements;
             this.score = score;
             count++;
         }
+
         public Movement() { }
-        public Object[] getSides() { return movements.toArray(); }
+        public String getSides() { return movements; }
         @Override
         public boolean equals(Object obj) {
             if( !(obj instanceof Movement) ) return false;
@@ -50,8 +57,8 @@ public class AI {
         @Override
         public int hashCode() {
             int hashCode = 0;
-            for(Side s : movements)
-                if (s != null) hashCode += (s.ordinal() * 31);
+            for(int i=0; i<movements.length(); ++i)
+                hashCode += ( ((int) movements.charAt(i)) * 31);
             return hashCode;
         }
     }
@@ -86,8 +93,9 @@ public class AI {
 
 
     static void moveMap(Map map, Movement m){
-        for (Object obj : m.getSides())
-            moveMap(map, ((Side) obj).ordinal());
+        String sides = m.getSides();
+        for (int i=0; i<sides.length(); ++i)
+            moveMap(map, (int) sides.charAt(i));
     }
 
     static void moveMap(Map map, int move){
