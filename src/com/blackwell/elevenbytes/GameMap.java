@@ -12,7 +12,7 @@ public class GameMap implements Map {
      */
     private int[][] map = new int[FIELD_SIZE][FIELD_SIZE];
 
-    private enum Side { LEFT, RIGHT, UP, DOWN}
+
     private int score=0;
 
     /*_____________________________INTERFACE_START_____________________________*/
