@@ -24,7 +24,7 @@ public interface Map {
     void moveRight();
     void moveUp();
     void moveDown();
-    String SAVES_FILE = "saves.txt";
+    String SAVES_FILE = "2048/saves.txt";
 
     void saveGame(String bestScore);
     String loadGame();

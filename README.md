@@ -32,7 +32,7 @@ Popular game remake on Java.
    - void start(Stage primaryStage);
    - void setUpdateOfMap();
    - void setButtonStyle(int i,int j, int FontSize, Bg color);
-3. MapImpl - implementation of interface below. 
+3. GameMap - implementation of interface below. 
 4. Map - interface, to interact with map.
    - int FIELD_SIZE = 4;
    - String SAVES_FILE = "saves.txt";
