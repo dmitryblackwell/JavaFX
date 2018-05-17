@@ -17,14 +17,16 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class ClientWindow extends Application implements TCPConnectionListener {
     private static final int WIDTH = 266;
     private static final int HEIGHT = 400;
 
     public static void main(String[] args) {
-        /*  Getting your IP.
-        InetAddress ip;
+        //Getting your IP.
+        /*InetAddress ip;
         try {
 
             ip = InetAddress.getLocalHost();
@@ -32,8 +34,7 @@ public class ClientWindow extends Application implements TCPConnectionListener {
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
-        }
-        */
+        }*/
 
         launch(args);
     }
