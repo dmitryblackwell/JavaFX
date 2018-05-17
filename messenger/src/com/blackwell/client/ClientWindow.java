@@ -3,20 +3,27 @@ package com.blackwell.client;
 import com.blackwell.network.TCPConnection;
 import com.blackwell.network.TCPConnectionListener;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
-public class ClientWindow extends JFrame implements ActionListener, TCPConnectionListener {
+import java.io.IOException;
+
+public class ClientWindow extends Application implements TCPConnectionListener {
     private static final int WIDTH = 266;
     private static final int HEIGHT = 400;
-    private static final String IP_ADDRESS = "192.168.31.142"; // ip address of the server
 
     public static void main(String[] args) {
+        /*  Getting your IP.
         InetAddress ip;
         try {
 
@@ -24,77 +31,121 @@ public class ClientWindow extends JFrame implements ActionListener, TCPConnectio
             System.out.println("Current IP address : " + ip.getHostAddress());
 
         } catch (UnknownHostException e) {
-
             e.printStackTrace();
-
         }
-        SwingUtilities.invokeLater(() -> new ClientWindow());
+        */
+
+        launch(args);
     }
 
-    private final JTextArea log = new JTextArea();
-    private final JTextField fieldNickName = new JTextField("anonymous");
-    private final JTextField fieldInput = new JTextField("Hi, guys!");
+    private final Text log = new Text();
+    private final TextField fieldInput = new TextField();
 
     private TCPConnection connection;
+    private  String ServerIpAddress = "192.168.31.142"; // ip address of the server
+    private String name = "anonymous";
 
-    private ClientWindow(){
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(WIDTH, HEIGHT);
-        setLocationRelativeTo(null);
-        setAlwaysOnTop(true);
+    @Override
+    public void start(Stage primaryStage) throws Exception {
 
+        displayInfoWindow(primaryStage);
 
-        log.setEditable(false);
-        log.setLineWrap(true);
+    }
 
-        add(log, BorderLayout.CENTER);
-        fieldInput.addActionListener(this);
-        add(fieldInput, BorderLayout.SOUTH);
-        add(fieldNickName, BorderLayout.NORTH);
+    private void displayInfoWindow(Stage primaryStage){
+        primaryStage.initStyle(StageStyle.UTILITY);
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(10d);
 
-        setVisible(true);
+        Label nameLabel = new Label();
+        Label serverIpLabel = new Label();
+
+        TextField nameField = new TextField(name);
+        TextField serverIPField = new TextField(ServerIpAddress);
+
+        Button btn = new Button("Connect");
+        btn.setOnAction(event -> {
+            name = nameField.getText().trim();
+            ServerIpAddress = serverIPField.getText().trim();
+
+            displayMessengerWindow(primaryStage);
+        });
+
+        HBox nameBox = new HBox(nameLabel, nameField);
+        nameBox.setAlignment(Pos.CENTER);
+        HBox serverBox = new HBox(serverIpLabel, serverIPField);
+        serverBox.setAlignment(Pos.CENTER);
+        HBox btnBox = new HBox(btn);
+        btnBox.setAlignment(Pos.CENTER);
+
+        vBox.getChildren().addAll(nameBox,serverBox,btnBox);
+
+        StackPane root = new StackPane();
+        root.getChildren().add(vBox);
+
+        primaryStage.setTitle("Sign in");
+        Scene scene = new Scene(root, WIDTH, HEIGHT);
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.show();
+    }
+
+    private void displayMessengerWindow(Stage stage){
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.BOTTOM_CENTER);
+
+        fieldInput.setOnAction(event -> {
+            String msg = fieldInput.getText();
+            if ("".equals(msg)) return;
+
+            fieldInput.setText(null);
+            connection.sendString(name +": "+ msg);
+        });
+
+        fieldInput.setMaxWidth(WIDTH);
+        vBox.getChildren().addAll(log,fieldInput);
+
+        StackPane root = new StackPane();
+        root.getChildren().add(vBox);
+
+        stage.setTitle("messenger");
+        Scene scene = new Scene(root, WIDTH, HEIGHT);
+        stage.setScene(scene);
+        stage.show();
 
         try {
-            connection = new TCPConnection(this, IP_ADDRESS, PORT);
+            connection = new TCPConnection(this, ServerIpAddress, PORT);
+            connection.sendString(name +" connected");
         } catch (IOException e) {
-            printMessege("Connection exception: " + e);
+            printMessage("Connection exception: " + e);
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String msg = fieldInput.getText();
-        if ("".equals(msg)) return;
-
-        fieldInput.setText(null);
-        connection.sendString(fieldNickName.getText() +": "+ msg);
-    }
 
     @Override
     public void onConnectionReady(TCPConnection tcpConnection) {
-        printMessege("Connection ready...");
+        printMessage("Connection ready...");
     }
 
     @Override
     public void onReceiveString(TCPConnection tcpConnection, String value) {
-        printMessege(value);
+        printMessage(value);
     }
 
     @Override
     public void onDisconnect(TCPConnection tcpConnection) {
-        printMessege("Connection close.");
+        printMessage("Connection close.");
     }
 
     @Override
     public void onException(TCPConnection tcpConnection, Exception ex) {
-        printMessege("Connection exception: " + ex);
+        printMessage("Connection exception: " + ex);
     }
 
-    private synchronized void printMessege(String msg){
-        SwingUtilities.invokeLater(() -> {
-            log.append(msg + EOL);
-            log.setCaretPosition(log.getDocument().getLength());
-        });
+    private synchronized void printMessage(String msg){
+        log.setText(log.getText() + msg + EOL);
+//        log.setCaretPosition(log.getDocument().getLength());
     }
 
 }
