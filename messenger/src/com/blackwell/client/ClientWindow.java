@@ -28,7 +28,6 @@ public class ClientWindow extends Application implements TCPConnectionListener {
     private static final String STYLE_FILE_PATH = "messenger/resource/style.css";
     private static final String START_NAME = "enter your name";
 
-
     public static void main(String[] args) { launch(args); }
 
     private final TextArea log = new TextArea();
