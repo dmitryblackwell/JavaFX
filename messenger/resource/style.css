@@ -1,0 +1,41 @@
+#btn_connect{
+    -fx-padding: 0.35em 0.28em;
+    -fx-font-size: 14px;
+    -jfx-button-type: RAISED;
+    -fx-background-color: #00ff00;
+    -fx-pref-width: 100;
+    -fx-text-fill: black
+}
+#pane{
+    /*-fx-background-image: url("../img/building.jpg");
+    -fx-background-repeat: round;
+    fx-background-position: default;
+    -fx-background-size: contain;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);*/
+    -fx-background-color: black;
+}
+#field{
+    -fx-background-color: #000000;
+    -fx-font-family: Consolas;
+    -fx-font-size: 20;
+    -fx-text-inner-color: #00ff00;
+}
+#log, #log:focused, #log:default{
+    -fx-control-inner-background:#000000;
+    -fx-font-family: Consolas;
+    -fx-font-size: 15;
+    -fx-text-fill: #00ff00;
+    -fx-highlight-fill: #00ff00;
+    -fx-highlight-text-fill: black;
+
+    -fx-background-insets: 0;
+    -fx-background-color: transparent, black, transparent, black;
+    -fx-background-radius: 0, 0, 0, 0;
+
+    -fx-box-border: none;
+    -fx-focus-color: -fx-control-inner-background;
+    -fx-faint-focus-color: -fx-control-inner-background;
+    -fx-text-box-border: -fx-control-inner-background;
+    -fx-border-width: 0;
+
+}

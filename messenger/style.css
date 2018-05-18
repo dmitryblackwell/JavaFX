@@ -1,0 +1,8 @@
+#btn_connect{
+    -fx-padding: 0.35em 0.28em;
+    -fx-font-size: 14px;
+    -jfx-button-type: RAISED;
+    -fx-background-color: rgb(77,102,204);
+    -fx-pref-width: 100;
+    -fx-text-fill: WHITE;
+}

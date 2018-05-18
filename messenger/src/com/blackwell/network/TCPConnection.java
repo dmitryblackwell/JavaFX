@@ -48,7 +48,7 @@ public class TCPConnection {
     }
 
 
-    public synchronized void disconnect(){
+    private void disconnect(){
         rxThread.interrupt();
         try {
             socket.close();
@@ -59,6 +59,6 @@ public class TCPConnection {
 
     @Override
     public String toString() {
-        return String.format("TCPConnection: %s: %s;", socket.getInetAddress(), socket.getPort()); // "TCPConnection: " + socket.getInetAddress() + ": " + socket.getPort();
+        return String.format("TCPConnection: %s: %s;", socket.getInetAddress(), socket.getPort());
     }
 }
