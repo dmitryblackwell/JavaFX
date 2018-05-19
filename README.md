@@ -48,3 +48,11 @@ Popular game remake on Java.
    
 #### GamePlay
 ![alt text](https://raw.githubusercontent.com/dmitryblackwell/JavaFX/master/screenshots/2048.gif)
+
+## Messenger
+
+Simple messenger and server app. You just run ChatServer first and just once. After you can run, as many as, 
+you want ClientWindows. In first window you need to type your name and server ip. It is shows in console, when server starts.
+After you can simple chat, with you friends, which connected to same server.
+
+![alt text](https://raw.githubusercontent.com/dmitryblackwell/JavaFX/master/screenshots/messenger.gif)
