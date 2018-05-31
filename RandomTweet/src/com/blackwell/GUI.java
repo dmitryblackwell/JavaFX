@@ -1,7 +1,10 @@
+package com.blackwell;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -15,13 +18,11 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
+import twitter4j.*;
 import twitter4j.api.TweetsResources;
 import twitter4j.conf.ConfigurationBuilder;
 
+import javax.management.Notification;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -46,29 +47,38 @@ public class GUI extends Application {
     }
 
 
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+    private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     private void tweetUpdate(String login) {
 
         ConfigurationBuilder builder = new ConfigurationBuilder();
-        // This keys is read only... sorry )))
+
+        // put in TwitterKeys your tokens
         builder.setDebugEnabled(true)
-                .setOAuthConsumerKey("o5Y3KTO80LuooTMrqioklMQYy")
-                .setOAuthConsumerSecret("7cpWmhvu6iyPvvxJ4RHAfQdVlCzf73ASHZb6cH2lQisOw07yjU")
-                .setOAuthAccessToken("4482344913-O2xj79vEictmpxIew4ldzQC07BOSOpKPCwTUqrO")
-                .setOAuthAccessTokenSecret("i3XGeHnLZHbjg169m7eviAs0NtCRPB1GHKL5I78gfIudf");
+                .setOAuthConsumerKey(TwitterKeys.ConsumerKey)
+                .setOAuthConsumerSecret(TwitterKeys.ConsumerSecret)
+                .setOAuthAccessToken(TwitterKeys.AccessToken)
+                .setOAuthAccessTokenSecret(TwitterKeys.AccessTokenSecret);
 
         TwitterFactory factory = new TwitterFactory(builder.build());
         Twitter twitter = factory.getInstance();
 
         try {
-            List<Status> statuses = twitter.getHomeTimeline();
+            Paging paging = new Paging(1, 200);
+            List<Status> statuses = twitter.getUserTimeline(login, paging);
             Random R = new Random();
+            statuses.size(); // !!! do not delete - without this nothing working
             Status status = statuses.get(R.nextInt(statuses.size()));
             dataUpdate(status.getUser().getBiggerProfileImageURL(),
                     status.getUser().getScreenName(),
                     dateFormat.format(status.getCreatedAt()),
                     status.getText());
         } catch (TwitterException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Wrong input data");
+            alert.setHeaderText(null);
+            alert.setContentText("Probably you type wrong username");
+
+            alert.showAndWait();
             e.printStackTrace();
         }
     }

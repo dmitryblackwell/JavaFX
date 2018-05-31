@@ -50,3 +50,7 @@ fabric.properties
 
 # Editor-based Rest Client
 .idea/httpRequests
+
+# tokens for my twitter
+RandomTweet/src/com/blackwell/TwitterKeys.java
+out/production/RandomTweet/RandomTweet/src/com/blackwell/TwitterKeys.class

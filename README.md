@@ -27,7 +27,7 @@ Popular game remake on Java.
    - ![#CC1500](https://placehold.it/15/CC1500/000000?text=+) RED_FULL
    - ![#C704FF](https://placehold.it/15/C704FF/000000?text=+) VIOLET_LIGHT
    - ![#5C76CC](https://placehold.it/15/5C76CC/000000?text=+) BLUE_LIGHT
-2. GUI - main class, that draw all javafx object.
+2. com.blackwell.GUI - main class, that draw all javafx object.
    - static void main(String[] args);
    - void start(Stage primaryStage);
    - void setUpdateOfMap();
