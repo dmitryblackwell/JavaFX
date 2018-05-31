@@ -9,7 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.input.DataFormat;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -19,10 +18,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import twitter4j.*;
-import twitter4j.api.TweetsResources;
 import twitter4j.conf.ConfigurationBuilder;
 
-import javax.management.Notification;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -46,8 +43,23 @@ public class GUI extends Application {
         tweetLabel.setText(tweet);
     }
 
-
     private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private static final double SPACING = 15d;
+    private static final int WIDTH = 600;
+    private static final int HEIGHT = 400;
+    private static final Insets PADDING = new Insets(20);
+    private static final String TWEET_LABEL_STYLE = "-fx-text-fill: #ffffff";
+    private static final String NAME_LABEL_STYLE = "-fx-font-weight: bold; -fx-text-fill: #ffffff;";
+    private static final String ROOT_STYLE = "-fx-background-color: #0084b4;";
+    private static final String BTN_STYLE = "-fx-background-color: #c0deed;";
+    private static final String BTN_TEXT = "rand";
+    private static final String DEFAULT_LOGIN = "_AlexHirsch";
+    private static final String APP_TITLE= "RandomTweet";
+    private static final Font NAME_FONT = new Font(30);
+    private static final Font TIME_FONT = new Font(10);
+    private static final Font TWEET_FONT = new Font(15);
+
+
     private void tweetUpdate(String login) {
 
         ConfigurationBuilder builder = new ConfigurationBuilder();
@@ -69,7 +81,7 @@ public class GUI extends Application {
             statuses.size(); // !!! do not delete - without this nothing working
             Status status = statuses.get(R.nextInt(statuses.size()));
             dataUpdate(status.getUser().getBiggerProfileImageURL(),
-                    status.getUser().getScreenName(),
+                    status.getUser().getName(),
                     dateFormat.format(status.getCreatedAt()),
                     status.getText());
         } catch (TwitterException e) {
@@ -85,36 +97,40 @@ public class GUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.initStyle(StageStyle.DECORATED);
+        primaryStage.initStyle(StageStyle.UTILITY);
 
         VBox vBox = new VBox();
-        vBox.setSpacing(15);
+        vBox.setSpacing(SPACING);
         vBox.setAlignment(Pos.CENTER);
 
         HBox tweetBox = new HBox();
-        tweetBox.setSpacing(30);
-        tweetBox.setPadding(new Insets(20));
+        tweetBox.setSpacing(SPACING*2);
+        tweetBox.setPadding(PADDING);
         tweetBox.setAlignment(Pos.CENTER);
 
         VBox tweetTextBox = new VBox();
         tweetLabel.setWrapText(true);
-        tweetLabel.setFont(new Font(15));
+        tweetLabel.setFont(TWEET_FONT);
+        tweetLabel.setStyle(TWEET_LABEL_STYLE);
 
-        nameLabel.setFont(new Font(30));
-        nameLabel.setStyle("-fx-font-weight: bold");
-        timeLabel.setFont(new Font(10));
+        nameLabel.setFont(NAME_FONT);
+        nameLabel.setStyle(NAME_LABEL_STYLE);
+        timeLabel.setFont(TIME_FONT);
 
         tweetTextBox.getChildren().addAll(nameLabel, timeLabel,tweetLabel);
         tweetBox.getChildren().addAll(circle, tweetTextBox);
 
         HBox inputBox = new HBox();
-        inputBox.setSpacing(10);
+        inputBox.setSpacing(SPACING);
         inputBox.setAlignment(Pos.BOTTOM_CENTER);
 
         Label loginLabel = new Label("@");
-        loginLabel.setFont(new Font(30));
+        loginLabel.setFont(TWEET_FONT);
+        loginLabel.setStyle(NAME_LABEL_STYLE);
         TextField textField = new TextField();
-        Button btn = new Button("rand");
+        textField.setText(DEFAULT_LOGIN);
+        Button btn = new Button(BTN_TEXT);
+        btn.setStyle(BTN_STYLE);
         btn.setOnAction(event -> tweetUpdate(textField.getText()));
 
         inputBox.getChildren().addAll(loginLabel, textField, btn);
@@ -122,12 +138,13 @@ public class GUI extends Application {
         vBox.getChildren().addAll(tweetBox, inputBox);
         StackPane root = new StackPane();
         root.getChildren().addAll(vBox);
-        primaryStage.setTitle("RandomTweet");
-        Scene scene = new Scene(root, 600, 400);
+        root.setStyle(ROOT_STYLE);
+        primaryStage.setTitle(APP_TITLE);
+        Scene scene = new Scene(root, WIDTH, HEIGHT);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
 
-        tweetUpdate("_AlexHirsch");
+        tweetUpdate(DEFAULT_LOGIN);
     }
 }
