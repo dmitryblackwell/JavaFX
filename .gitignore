@@ -52,7 +52,7 @@ fabric.properties
 .idea/httpRequests
 
 # tokens for my twitter
-RandomTweet/src/com/blackwell/TwitterKeys.java
-RandomTweet/src/org/george/TwitterKeys.java
+# RandomTweet/src/com/blackwell/TwitterKeys.java
+# RandomTweet/src/org/george/TwitterKeys.java
 out/production/RandomTweet/src/com/blackwell/TwitterKeys.class
 out/production/RandomTweet/src/org/george/TwitterKeys.class
