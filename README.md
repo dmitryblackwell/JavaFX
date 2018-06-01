@@ -56,3 +56,11 @@ you want ClientWindows. In first window you need to type your name and server ip
 After you can simple chat, with you friends, which connected to same server.
 
 ![alt text](https://raw.githubusercontent.com/dmitryblackwell/JavaFX/master/screenshots/messenger.gif)
+
+
+## Random Tweet
+
+Simple app, that contains TextField and button. You Enter user's login and that press button rand. After your next press,
+it is show you new random tweet,reply or retweet. App got a nice tweet-colored interface.
+ 
+![alt text](https://raw.githubusercontent.com/dmitryblackwell/JavaFX/master/screenshots/randtweet.gif)
