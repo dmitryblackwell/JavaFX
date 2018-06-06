@@ -54,5 +54,7 @@ fabric.properties
 # tokens for my twitter
 RandomTweet/src/com/blackwell/TwitterKeys.java
 RandomTweet/src/org/george/TwitterKeys.java
+GitHubBot/src/com/blackwell/TwitterKeys.java
 out/production/RandomTweet/src/com/blackwell/TwitterKeys.class
 out/production/RandomTweet/src/org/george/TwitterKeys.class
+out/production/GitHubBot/src/com/blackwell/TwitterKeys.class
