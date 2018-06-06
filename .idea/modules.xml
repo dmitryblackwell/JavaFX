@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/2048/2048.iml" filepath="$PROJECT_DIR$/2048/2048.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GitHubBot/GitHubBot.iml" filepath="$PROJECT_DIR$/GitHubBot/GitHubBot.iml" />
       <module fileurl="file://$PROJECT_DIR$/JavaFX.iml" filepath="$PROJECT_DIR$/JavaFX.iml" />
       <module fileurl="file://$PROJECT_DIR$/RandomTweet/RandomTweet.iml" filepath="$PROJECT_DIR$/RandomTweet/RandomTweet.iml" />
       <module fileurl="file://$PROJECT_DIR$/calculator/calculator.iml" filepath="$PROJECT_DIR$/calculator/calculator.iml" />
