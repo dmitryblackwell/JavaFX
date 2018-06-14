@@ -130,12 +130,13 @@ public class GitMonitor extends Thread {
 
             try {
 
-//                checkForRepos();
-//                List<String> notTrackedCommits = getNotTrackedCommits();
-//                for(String message : notTrackedCommits)
-//                    //System.out.println(message+"\n~~~~~~~~~~~~~~~~~~\n");
-//                    sendTweet(message);
+                checkForRepos();
+                List<String> notTrackedCommits = getNotTrackedCommits();
+                for(String message : notTrackedCommits)
+                    //System.out.println(message+"\n~~~~~~~~~~~~~~~~~~\n");
+                    sendTweet(message);
 
+                //break;
                 Thread.sleep(70*1000);
 
                 if (interrupted())

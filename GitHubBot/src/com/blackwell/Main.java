@@ -1,7 +1,5 @@
 package com.blackwell;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
@@ -10,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main extends Application {
+public class Main{
 
     public static void main(String[] args) throws IOException, ParseException {
         Thread monitor = new GitMonitor("dmitryblackwell",
@@ -21,9 +19,6 @@ public class Main extends Application {
 
         ((GitMonitor) monitor).update();
         monitor.start();
-
-
-
 
     }
 
@@ -59,8 +54,4 @@ public class Main extends Application {
 
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-
-    }
 }
